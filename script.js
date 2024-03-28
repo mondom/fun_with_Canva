@@ -9,17 +9,20 @@ ctx.strokeStyle = '#BADA55'
 ctx.lineJoin = 'round'
 ctx.lineCap = 'round'
 ctx.lineWidth = 20
+ctx.globalCompositeOperation = 'multiply'
 
 // powyższe style ustawiają kolor rysowania oraz style linii
 
 let isDrawing = false
 let lastX = 0
 let lastY = 0
-let color = 0
+let random = 0
+let direction = true
 
 function draw(e) {
 	if (!isDrawing) return
-	ctx.strokeStyle = `hsl(${color}, 100%, 50%)`
+	ctx.strokeStyle = `hsl(${random}, 100%, 50%)`
+
 	ctx.beginPath()
 	// start from
 	ctx.moveTo(lastX, lastY)
@@ -27,7 +30,20 @@ function draw(e) {
 	ctx.lineTo(e.offsetX, e.offsetY)
 	ctx.stroke()
 	;[lastX, lastY] = [e.offsetX, e.offsetY]
-	color++
+	random++
+	if (random >= 360) {
+		random = 0
+	}
+
+	if (ctx.lineWidth >= 60 || ctx.lineWidth <= 1) {
+		direction = !direction
+	}
+
+	if (direction) {
+		ctx.lineWidth++
+	} else {
+		ctx.lineWidth--
+	}
 }
 
 canvas.addEventListener('mousedown', e => {
