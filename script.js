@@ -8,26 +8,34 @@ const ctx = canvas.getContext('2d')
 ctx.strokeStyle = '#BADA55'
 ctx.lineJoin = 'round'
 ctx.lineCap = 'round'
+ctx.lineWidth = 20
 
 // powyższe style ustawiają kolor rysowania oraz style linii
 
 let isDrawing = false
 let lastX = 0
 let lastY = 0
+let color = 0
 
 function draw(e) {
 	if (!isDrawing) return
+	ctx.strokeStyle = `hsl(${color}, 100%, 50%)`
 	ctx.beginPath()
-    // start from
+	// start from
 	ctx.moveTo(lastX, lastY)
-    // go to
+	// go to
 	ctx.lineTo(e.offsetX, e.offsetY)
 	ctx.stroke()
-    lastX = e.offsetX
-    lastY = e.offsetY
+	;[lastX, lastY] = [e.offsetX, e.offsetY]
+	color++
 }
+
+canvas.addEventListener('mousedown', e => {
+	isDrawing = true
+	;[lastX, lastY] = [e.offsetX, e.offsetY]
+})
+
 canvas.addEventListener('mousemove', draw)
-canvas.addEventListener('mousedown', () => (isDrawing = true))
 canvas.addEventListener('mouseup', () => (isDrawing = false))
 canvas.addEventListener('mouseout', () => (isDrawing = false))
 
